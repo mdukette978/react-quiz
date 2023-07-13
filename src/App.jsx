@@ -1,31 +1,77 @@
 
 
-import {useState} from 'react'
-import LoggedOut from './components/LoggedOut'
-import LoggedIn from './components/LoggedIn'
 
+
+import Loading from './components/Loading'
+import Posts from './components/Posts'
+import {useState, useEffect} from 'react'
 
 function App() {
 
-  // Hook up the functionality for the LoggedIn component to show when the loggedIn state is true
-  // and the LoggedOut component to show when loggedIn state is false.
+  const [posts, setPosts] = useState([])
 
-  // See instruction ins toggleLogIn function
+  useEffect(() => {
+    const getData = async () => {
+      const res = await fetch('https://jsonplaceholder.typicode.com/posts')
+      const data = await res.json()
+      setPosts(data)
+    }
 
-  const [loggedIn, setLoggedIn] = useState(true)
+    getData()
+  }, []) 
 
-  const toggleLogIn = () => {
-    // should change the state of loggedIn to whatever it's opposite is. 
-    // Remember to pass this prop down to the button component, and hook it up there.
+  // useEffect(() => {
+  //   async function getData() {
+  //     const res = await fetch('https://jsonplaceholder.typicode.com/posts')
+  //     const data = await res.json()
+  //     setPosts(data)
+  //   }
+
+  //   getData()
+  // }, []) 
+
+  // useEffect(function() {
+  //   function getData() {
+  //     fetch('https://jsonplaceholder.typicode.com/posts')
+  //     .then(function(res) {
+  //       return res.json()
+  //     })
+  //     .then(function(data) {
+  //       setPosts(data)
+  //     })
+  //   }
+
+  //   getData()
+  // }, [])
+ 
+  if(posts.length === 0) {
+    return <Loading />
   }
 
-  if(loggedIn) {
-    return <LoggedIn />
-  }
-
-  return <LoggedOut />
-
-
+  return <Posts posts={posts} />
 }
 
 export default App
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
